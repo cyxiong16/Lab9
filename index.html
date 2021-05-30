@@ -55,6 +55,14 @@
     <button>Trigger a Global Error</button>
   </section>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "cc7b121f71a14f929661db49c57d1e06"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
   <script>
     let calculateBtn = document.querySelector('#calculate');
     calculateBtn.addEventListener('click', () => {
@@ -62,11 +70,89 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try {
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch(error) {
+        console.error("Calculator had a miscalculation");
+      } finally {
+        console.log("Finally Message");
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+
+    errorBtns[0].addEventListener('click', () => {
+      console.log("Console Log Demo");
+    });
+
+    errorBtns[1].addEventListener('click', () => {
+      console.error("Console Error Demo");
+    });
+
+    errorBtns[2].addEventListener('click', () => {
+      console.dir(errorBtns[2]);
+    });
+
+    errorBtns[3].addEventListener('click', () => {
+      console.dirxml(document.body);
+    });
+
+    errorBtns[4].addEventListener('click', () => {
+      console.group();
+    });
+
+    errorBtns[5].addEventListener('click', () => {
+      console.groupEnd();
+    });
+
+    errorBtns[6].addEventListener('click', () => {
+      console.log([
+        {
+          name: "Caroline Xiong",
+          birthday: "August 30, 2001"
+        },
+        {
+          name: "Jaehyun Jung",
+          birthday: "February 14, 1997"
+        },
+        {
+          name: "Jaemin Na",
+          birthday: "August 13, 2000"
+        }
+      ]);
+    });
+
+    errorBtns[7].addEventListener('click', () => {
+      console.time();
+    });
+
+    errorBtns[8].addEventListener('click', () => {
+      console.timeEnd();
+    });
+
+    errorBtns[9].addEventListener('click', () => {
+      const one = () => { two(); };
+      const two = () => { three(); };
+      const three = () => { four(); };
+      const four = () => { console.trace(); };
+      one();
+    });
+
+    class CustomError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "CustomError";
+      }
+    }
+
+    function throwCustomError() {
+      throw new CustomError("Custom error");
+    }
+
+    errorBtns[10].addEventListener('click', () => {
+      throwCustomError();
+    });
   </script>
 </body>
 </html>
